@@ -36,3 +36,4 @@ jobs:
             docker rm m3lem || true
             docker build -t m3lem .
             docker run -d --name m3lem -p 80:80 m3lem
+            
