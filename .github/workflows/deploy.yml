@@ -19,13 +19,19 @@ jobs:
           host: ${{ secrets.GCP_VM_IP }}
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_SSH_KEY }}
+          port: 22
           script: |
+            # Go to or create app directory
             cd ~/m3lem || mkdir ~/m3lem && cd ~/m3lem
+
+            # Clone or pull latest version from the repo
             if [ ! -d ".git" ]; then
               git clone https://github.com/AgileAUI/M3lem.ma.git .
             else
               git pull origin main
             fi
+
+            # Rebuild and run app with Docker
             docker stop m3lem || true
             docker rm m3lem || true
             docker build -t m3lem .
