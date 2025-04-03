@@ -1,4 +1,4 @@
-name: Deploy to GCP VM
+name: Deploy to GCP
 
 on:
   push:
@@ -7,33 +7,20 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy
+    runs-on: ubuntu-22.04
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Deploy to GCP via SSH
+      - name: Deploy to GCP VM via SSH
         uses: appleboy/ssh-action@v0.1.6
         with:
           host: ${{ secrets.GCP_VM_IP }}
           username: ${{ secrets.GCP_VM_USER }}
           key: ${{ secrets.GCP_SSH_KEY }}
-          port: 22
           script: |
-            # Go to or create app directory
-            cd ~/m3lem || mkdir ~/m3lem && cd ~/m3lem
-
-            # Clone or pull latest version from the repo
-            if [ ! -d ".git" ]; then
-              git clone https://github.com/AgileAUI/M3lem.ma.git .
-            else
-              git pull origin main
-            fi
-
-            # Rebuild and run app with Docker
-            docker stop m3lem || true
-            docker rm m3lem || true
-            docker build -t m3lem .
-            docker run -d --name m3lem -p 80:80 m3lem
-            
+            cd ~/CI-CD-Workshop
+            chmod +x ./scripts/deploy.sh
+            ./scripts/deploy.sh
