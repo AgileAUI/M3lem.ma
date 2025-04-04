@@ -24,3 +24,4 @@ jobs:
             cd ~/CI-CD-Workshop
             chmod +x ./scripts/deploy.sh
             ./scripts/deploy.sh
+
